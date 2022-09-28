@@ -27,6 +27,17 @@ let db = new NeDB({
     
     });
 
+    app.get( `${api}:id` ,(req, res) => {
+        db.findOne({_id:req.params.id}).exec((err, user) => {
+            if(err) {
+                app.utils.error.send(err, req, res);
+                } else {
+                    res.status(200).json(user)
+              
+                }
+        })
+    });
+
     app.post( `${api}`,(req, res) => {/* 
         res.statusCode = 200;
         res.setHeader('Content-type', 'application/json'); */
@@ -40,18 +51,28 @@ let db = new NeDB({
                 res.status(200).json(user)
             }
         })
+    });
 
-     });
-
-     app.get( `${api}:id` ,(req, res) => {
-        db.findOne({_id:req.params.id}).exec((err, user) => {
+    app.put( `${api}:id` ,(req, res) => {
+        db.update({_id:req.params.id}, req.body, err => {
             if(err) {
                 app.utils.error.send(err, req, res);
                 } else {
-                    res.status(200).json(user)
-              
+                    res.status(200).json(Object.assign(req.params, req.body));
                 }
-        })
-       });
- 
+        });
+    });
+
+    app.delete( `${api}:id` ,(req, res) => {
+        db.remove({_id:req.params.id}, req.body, err => {
+            if(err) {
+                app.utils.error.send(err, req, res);
+                } else {
+                    res.status(200).json(req.params);
+                }
+        });
+    });
+
+
+
 }
