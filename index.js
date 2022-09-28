@@ -43,7 +43,10 @@ server.listen(3699,'127.0.0.1', () => {
 
  let app = express();
 
- app.get('/',(req, res) => {
+ let routesIndex = require('./routes/index')
+ let routesUsers = require('./routes/users')
+
+/*  app.get('/',(req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-type', 'text/html');
     res.end('<h2>Hello world</h2>');
@@ -59,8 +62,10 @@ server.listen(3699,'127.0.0.1', () => {
             id: 1
         }]
     });
- });
+ }); */
 
+ app.use(routesIndex);
+ app.use('/users', routesUsers);
  
  app.listen(3699,'127.0.0.1', () => {
      console.log('servidor rodando');
