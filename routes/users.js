@@ -3,24 +3,55 @@
 let routes = express.Router() */
 
 let api = '/users/'
+
+let NeDB = require('nedb');
+let db = new NeDB({
+    filename: 'users.db',
+    autoload: true // Deixa sempre carregado, se n tiver, ele cria.
+});
+
  module.exports = (app) => {
 
     app.get( `${api}` ,(req, res) => {
-        res.statusCode = 200;
-        res.setHeader('Content-type', 'application/json');
-        res.json({
-            users: [{
-                name:'Fabryny',
-                email: 'fabryny.silva@gmail.com',
-                id: 1
-            }]
-        });
-     });
+     db.find({}).sort({name: 1 }).exec((err, users) => {// sort() 1 ascendente, -1 descendente
+         if(err) {
+            app.utils.error.send(err, req, res);
+            } else {
+                res.statusCode = 200;
+                res.setHeader('Content-type', 'application/json');
+                res.status(200).json({
+                    users //users: users   -> mesma coisa
+                })
+            }
+     }); 
     
+    });
+
     app.post( `${api}`,(req, res) => {/* 
         res.statusCode = 200;
         res.setHeader('Content-type', 'application/json'); */
-        res.json(req.body);
+
+        /*   res.json(req.body); */
+
+        db.insert(req.body, (err, user) => {
+            if(err) {
+                app.utils.error.send(err, req, res);
+            } else {
+                res.status(200).json(user)
+            }
+        })
+
      });
+
+     app.get( `${api}:id` ,(req, res) => {
+        db.findOne({_id:req.params.id}).exec((err, user) => {
+            if(err) {
+                app.utils.error.send(err, req, res);
+                } else {
+                    res.status(200).json(user)
+              
+                }
+        })
+       });
  
 }

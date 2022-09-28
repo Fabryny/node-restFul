@@ -36,8 +36,10 @@ server.listen(3699,'127.0.0.1', () => {
 */
 
 
- //INICIAR SERVIDOR  COM EXPRESS
 
+
+
+ //INICIAR SERVIDOR  COM EXPRESS
 
  const express = require('express');
  let consign = require('consign');
@@ -46,7 +48,7 @@ server.listen(3699,'127.0.0.1', () => {
  app.use(express.json())
  app.use(express.urlencoded({ extended: true}))
  
- consign().include('routes').into(app)
+ consign().include('routes').include('utils').into(app)
 
 /*
  let routesIndex = require('./routes/index')
