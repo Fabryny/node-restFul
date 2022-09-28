@@ -17,16 +17,10 @@ let api = '/users/'
         });
      });
     
-    app.get( `${api}admin`,(req, res) => {
+    app.post( `${api}`,(req, res) => {/* 
         res.statusCode = 200;
-        res.setHeader('Content-type', 'application/json');
-        res.json({
-            users: [{
-                name:'Fabryny ADMIN',
-                email: 'fabryny.silva@gmail.com',
-                id: 1
-            }]
-        });
+        res.setHeader('Content-type', 'application/json'); */
+        res.json(req.body);
      });
  
 }

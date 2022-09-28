@@ -42,6 +42,9 @@ server.listen(3699,'127.0.0.1', () => {
  const express = require('express');
  let consign = require('consign');
  let app = express();
+
+ app.use(express.json())
+ app.use(express.urlencoded({ extended: true}))
  
  consign().include('routes').into(app)
 
