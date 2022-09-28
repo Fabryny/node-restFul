@@ -38,12 +38,18 @@ let db = new NeDB({
         })
     });
 
-    app.post( `${api}`,(req, res) => {/* 
+    const { check } = require('express-validator');
+
+    app.post( `${api}`,
+              check ('name').notEmpty().withMessage('Nome é obrigatorio!'),
+              check('email').isEmail().withMessage('Email invalido!'),
+              (req, res) => {/* 
         res.statusCode = 200;
         res.setHeader('Content-type', 'application/json'); */
 
         /*   res.json(req.body); */
 
+        if(!app.utils.validator.user(app, req, res)) return false
         db.insert(req.body, (err, user) => {
             if(err) {
                 app.utils.error.send(err, req, res);
@@ -53,7 +59,14 @@ let db = new NeDB({
         })
     });
 
-    app.put( `${api}:id` ,(req, res) => {
+    app.put( `${api}:id`,
+              check ('name').notEmpty().withMessage('Nome é obrigatorio!'),
+              check('email').isEmail().withMessage('Email invalido!'),
+              (req, res) => {
+
+       if(!app.utils.validator.user(app, req, res)) return false
+
+                
         db.update({_id:req.params.id}, req.body, err => {
             if(err) {
                 app.utils.error.send(err, req, res);
